@@ -32,9 +32,12 @@ class AppPackageMakerPkg extends AppPackageMaker {
       ),
     );
 
+    // 先设置应用程序的权限
+    await $('chmod', ['-R', '755', appFile.path]);
+
     await $('xcrun', [
       'productbuild',
-      '--root',
+      '--component',
       appFile.path,
       makeConfig.installPath ?? '/Applications/',
       unsignedPkgFile.path,
