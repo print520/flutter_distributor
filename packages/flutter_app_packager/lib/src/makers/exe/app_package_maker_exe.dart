@@ -64,6 +64,15 @@ class AppPackageMakerExe extends AppPackageMaker {
 
     packagingDirectory.deleteSync(recursive: true);
 
+    // 编译完成后删除复制到 dist/ 的临时 vc_redist 文件（已嵌入 setup.exe 内部，无需单独分发）
+    final vcRedistInDist = File(p.join(
+      p.dirname('${packagingDirectory.path}.iss'),
+      'vc_redist.x64.exe',
+    ));
+    if (vcRedistInDist.existsSync()) {
+      vcRedistInDist.deleteSync();
+    }
+
     return MakeResult(makeConfig);
   }
 }
