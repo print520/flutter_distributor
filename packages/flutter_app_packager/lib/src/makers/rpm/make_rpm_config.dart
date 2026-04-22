@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_app_packager/src/api/app_package_maker.dart';
 
-class MakeRPMConfig extends MakeConfig {
+class MakeRPMConfig extends MakeLinuxPackageConfig {
   MakeRPMConfig({
     // Desktop file
     required this.displayName,
@@ -105,7 +105,7 @@ class MakeRPMConfig extends MakeConfig {
     return {
       'SPEC': {
         'preamble': {
-          'Name': appName,
+          'Name': appBinaryName,
           'Version': appVersion.toString(),
           'Release':
               "${appVersion.build.isNotEmpty ? appVersion.build.first : "1"}%{?dist}",
@@ -151,8 +151,8 @@ class MakeRPMConfig extends MakeConfig {
         'Version': appVersion.toString(),
         'Name': displayName,
         'GenericName': genericName,
-        'Icon': appName,
-        'Exec': '$appName %U',
+        'Icon': appBinaryName,
+        'Exec': '$appBinaryName %U',
         'Actions': actions != null && actions!.isNotEmpty
             ? '${actions!.join(';')};'
             : null,

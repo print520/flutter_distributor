@@ -67,9 +67,9 @@ class AppPackageMakerRPM extends AppPackageMaker {
       }
     }
 
-    // making rpmbuild/BUILD/[appName] directory
+    // making rpmbuild/BUILD/[appBinaryName] directory
     final buildPath = path.join(rpmbuildDirPath, 'BUILD');
-    final buildRoot = path.join(buildPath, makeConfig.appName);
+    final buildRoot = path.join(buildPath, makeConfig.appBinaryName);
     final specsPath = path.join(rpmbuildDirPath, 'SPECS');
     final rpmPath =
         path.join(rpmbuildDirPath, 'RPMS', makeConfig.buildArch ?? 'x86_64');
@@ -78,7 +78,7 @@ class AppPackageMakerRPM extends AppPackageMaker {
       buildWivesDirFile.createSync(recursive: true);
     }
 
-    /// copying app files to rpmbuild/BUILD/[appName] directory
+    /// copying app files to rpmbuild/BUILD/[appBinaryName] directory
     final bundleFiles = appDirectory.listSync();
     for (final file in bundleFiles) {
       await $(
@@ -125,7 +125,7 @@ class AppPackageMakerRPM extends AppPackageMaker {
     iconFile?.copy(
       path.join(
         buildPath,
-        makeConfig.appName + path.extension(iconFile.path),
+        makeConfig.appBinaryName + path.extension(iconFile.path),
       ),
     );
 
@@ -137,9 +137,10 @@ class AppPackageMakerRPM extends AppPackageMaker {
     }
 
     // create & write the files got from makeConfig
-    final specFile = File(path.join(specsPath, '${makeConfig.appName}.spec'));
+    final specFile =
+        File(path.join(specsPath, '${makeConfig.appBinaryName}.spec'));
     final desktopEntryFile =
-        File(path.join(buildPath, '${makeConfig.appName}.desktop'));
+        File(path.join(buildPath, '${makeConfig.appBinaryName}.desktop'));
 
     if (!specFile.existsSync()) specFile.createSync();
     if (!desktopEntryFile.existsSync()) desktopEntryFile.createSync();
